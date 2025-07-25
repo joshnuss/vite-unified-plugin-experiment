@@ -19,10 +19,10 @@ The plugin API looks like this:
 
 ```javascript
 // in vite.config.ts
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
-import unified from './src/plugins/unified';
-import * as z from 'zod';
+import { sveltekit } from '@sveltejs/kit/vite'
+import { defineConfig } from 'vite'
+import unified from './src/plugins/unified'
+import * as z from 'zod'
 
 export default defineConfig({
   plugins: [
@@ -43,5 +43,5 @@ export default defineConfig({
 
     sveltekit()
   ]
-});
+})
 ```

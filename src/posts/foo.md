@@ -11,5 +11,5 @@ author: josh
 Hello World
 
 ```javascript
-x = 1 + 1;
+x = 1 + 1
 ```

@@ -1,11 +1,11 @@
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
-import path from 'path';
-import unified from './src/plugin';
-import * as z from 'zod';
-import remarkGfm from 'remark-gfm';
-import remarkCallout from '@r4ai/remark-callout';
-import rehypeShiki from '@shikijs/rehype';
+import { sveltekit } from '@sveltejs/kit/vite'
+import { defineConfig } from 'vite'
+import path from 'path'
+import unified from './src/plugin'
+import * as z from 'zod'
+import remarkGfm from 'remark-gfm'
+import remarkCallout from '@r4ai/remark-callout'
+import rehypeShiki from '@shikijs/rehype'
 
 export default defineConfig({
   plugins: [
@@ -41,4 +41,4 @@ export default defineConfig({
       $posts: path.resolve('./src/posts')
     }
   }
-});
+})
