@@ -1,7 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig } from 'vite'
 import path from 'path'
-import unified from './src/plugin'
+import unified from './src/lib/plugin'
 import * as z from 'zod'
 import remarkGfm from 'remark-gfm'
 import remarkCallout from '@r4ai/remark-callout'
