@@ -38,7 +38,6 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      $data: path.resolve('./src/data'),
       $posts: path.resolve('./src/posts')
     }
   }
