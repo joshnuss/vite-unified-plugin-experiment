@@ -51,8 +51,6 @@ export type Options<Schema> = {
 }
 
 export default function plugin<Schema extends z.Schema>(options: Options<Schema>): Plugin {
-  const virtualModuleId = 'virtual:vite-plugin-collection-module'
-  const resolvedPath = path.resolve(`./src/${options.base}`)
 
   return {
     name: 'vite-plugin-collection',
@@ -60,7 +58,7 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
       return {
         resolve: {
           alias: {
-            [`#${options.base}`]: resolvedPath
+            [`#${options.base}`]: path.resolve(`./src/${options.base}`)
           },
         }
       }
@@ -74,16 +72,12 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
 
     load(id) {
       if (id.endsWith(`src/${options.base}`)) {
-        const singular = pluralize.singular(options.base)
-        const get_name = `get_${snakeCase(singular)}`
-        const list_name = `list_${snakeCase(options.base)}`
-
         return `
-          export function ${get_name}(id) {
+          export function get(id) {
             return import(\`./${options.base}/\${id}.md\`)
           }
 
-          export async function ${list_name}() {
+          export async function list() {
             const files = import.meta.glob('./${options.base}/*.md')
             const records = await Promise.all(
               Object

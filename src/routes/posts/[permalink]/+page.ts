@@ -1,10 +1,10 @@
 import { error, type ServerLoad } from '@sveltejs/kit'
-import { get_post } from '#posts'
+import { get } from '#posts'
 
 export const load: ServerLoad = async ({ params }) => {
   try {
     return {
-      post: await get_post(params.permalink)
+      post: await get(params.permalink)
     }
   } catch (err) {
     console.error(err)

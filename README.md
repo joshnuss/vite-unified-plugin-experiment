@@ -1,18 +1,22 @@
 # vite unified plugin
 
-experiment to create a framework-agnostic vite plugin for working with markdown
+Experimental vite plugin for markdown blogs & docs sites.
 
 ## Benefits
 
-- Based on `unified`
-- Supports `remark` & `rehype` plugins
+- Super simple API and ultra-light setup.
+- Framework agnostic. Works with Svelte, Vue, and React.
+- Type safe frontmatter and dynamically typed content.
+
+## Features
+
+- Based on `unified`. Supports all `remark` & `rehype` plugins.
 - Simple API
-  - Loading a single post `await get_post(slug)`
-  - Loading multiple posts `await list_posts()`
+  - Loading a single post `await get(slug)`
+  - Loading multiple posts `await list()`
 - Can have multiple directories (blog, docs) with separate config
-- Frontmatter is typed with Zod
 - Supports Shiki via rehype
-- It automatically adds as alias for each collection, for example `base: 'posts'` adds an alias `import ... from '#posts'`
+- It adds an alias for each collection, for example a collection named `'posts'` an alias `import ... from '#posts'` is provided.
 - It be configured to sort the content, for example based on in the frontmatter like `date`
 
 ## Config example
@@ -62,12 +66,12 @@ For example in SvelteKit
 
 ```javascript
 // in src/routes/posts/+page.svelte
-import { list_posts } from '#posts'
+import { list } from '#posts'
 
 export async function load() {
-  return {
-    posts: await list_posts()
-  }
+  const posts = await list()
+
+  return { posts }
 }
 ```
 
@@ -78,13 +82,13 @@ Under the hoods this uses `import.meta.glob(...)`
 ```javascript
 // in src/routes/posts/[slug]/+page.svelte
 import { error, type ServerLoad } from '@sveltejs/kit'
-import { get_post } from '#posts'
+import { get } from '#posts'
 
 export const load: ServerLoad = async ({ params }) => {
   try {
-    return {
-      post: await get_post(params.slug)
-    }
+    const post = await get(params.slug)
+
+    return { post }
   } catch (err) {
     error(404)
   }
