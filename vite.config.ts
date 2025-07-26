@@ -1,6 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig } from 'vite'
-import content from './src/lib/plugin'
+import collection from './src/lib/plugin'
 import * as z from 'zod'
 import remarkGfm from 'remark-gfm'
 import remarkCallout from '@r4ai/remark-callout'
@@ -8,7 +8,7 @@ import rehypeShiki from '@shikijs/rehype'
 
 export default defineConfig({
   plugins: [
-    content({
+    collection({
       base: 'posts',
       pattern: '*.md',
       fields: z.object({
