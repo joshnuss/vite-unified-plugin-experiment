@@ -117,7 +117,7 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
 
       if (attributes) {
         constants = Object.entries(attributes).map(
-          ([key, value]) => `export const ${key} = "${value}"`
+          ([key, value]) => `export const ${key} = ${JSON.stringify(value)}`
         )
       }
 
