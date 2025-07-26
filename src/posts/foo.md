@@ -13,3 +13,10 @@ Hello World
 ```javascript
 x = 1 + 1
 ```
+
+
+```svelte
+<script lang="ts">
+  let props = $props()
+</script>
+```
