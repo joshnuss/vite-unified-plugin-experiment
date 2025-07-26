@@ -33,8 +33,10 @@ export default defineConfig({
       pattern: '*.md',
       fields: z.object({
         title: z.string().nonempty(),
-        summary: z.optional(z.string()),
-        date: z.string().date()
+        banner: z.url(),
+        summary: z.string().optional(),
+        date: z.iso.date(),
+        tags: z.array(z.string()).optional(),
       }),
       remark: [
         // remark plugins

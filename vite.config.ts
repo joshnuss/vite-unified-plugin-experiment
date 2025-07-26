@@ -13,8 +13,8 @@ export default defineConfig({
       pattern: '*.md',
       fields: z.object({
         title: z.string().nonempty(),
-        banner: z.string().url().nonempty(),
-        summary: z.optional(z.string()),
+        banner: z.url().nonempty(),
+        summary: z.string().optional(),
         date: z.iso.date(),
         tags: z.array(z.string()).optional(),
         author: z.enum(['josh', 'jonathan'])
