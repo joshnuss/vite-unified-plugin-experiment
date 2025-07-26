@@ -13,7 +13,7 @@ experiment to create a framework-agnostic vite plugin for working with markdown
 - Frontmatter is typed with Zod
 - Supports Shiki via rehype
 - It automatically adds as alias for each collection, for example `base: 'posts'` adds an alias `import ... from '#posts'`
-- Can sort content, for example based on date
+- It be configured to sort the content, for example based on in the frontmatter like `date`
 
 ## Config example
 
@@ -43,7 +43,10 @@ export default defineConfig({
       ],
       rehype: [
         // rehype plugins
-      ]
+      ],
+
+      // set a default sort order based on `date` field
+      sort: { field: 'date', direction: 'descending'}
     }),
 
     sveltekit()
