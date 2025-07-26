@@ -7,11 +7,12 @@ experiment to create a framework-agnostic vite plugin for working with markdown
 - Based on `unified`
 - Supports `remark` & `rehype` plugins
 - Simple API
-  - Loading a single post ``await import(`$posts/${slug}.md`)``
-  - Loading multiple posts `import.meta.glob("$posts/*.md")`
+  - Loading a single post `await get_post(slug)`
+  - Loading multiple posts `await list_posts()`
 - Can have multiple directories (blog, docs) with separate config
 - Frontmatter is typed with Zod
 - Supports Shiki via rehype
+- It automatically adds as alias for each collection, for example `base: 'posts'` adds an import `import { get_post, list_posts } from '#posts'`
 
 ## Config example
 
@@ -21,14 +22,15 @@ The plugin API looks like this:
 // in vite.config.ts
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig } from 'vite'
-import unified from './src/plugins/unified'
+import collection from './src/plugins/unified'
 import * as z from 'zod'
 
 export default defineConfig({
   plugins: [
-    unified({
-      base: 'src/posts/*.md',
-      matter: z.object({
+    collection({
+      base: 'posts',
+      pattern: '*.md',
+      fields: z.object({
         title: z.string().nonempty(),
         summary: z.optional(z.string()),
         date: z.string().date()
@@ -45,3 +47,42 @@ export default defineConfig({
   ]
 })
 ```
+
+## Usage example
+
+For example in SvelteKit
+
+### To load a list of posts:
+
+```
+// in src/routes/posts/+page.svelte
+import { list_posts } from '#posts'
+
+export async function load() {
+  return {
+    posts: await list_posts()
+  }
+}
+```
+
+Under the hoods this uses `import.meta.glob(...)`
+
+### To load a single post:
+
+```
+// in src/routes/posts/[slug]/+page.svelte
+import { error, type ServerLoad } from '@sveltejs/kit'
+import { get_post } from '#posts'
+
+export const load: ServerLoad = async ({ params }) => {
+  try {
+    return {
+      post: await get_post(params.slug)
+    }
+  } catch (err) {
+    error(404)
+  }
+}
+```
+
+Under the hoods this uses `await import(...)`
