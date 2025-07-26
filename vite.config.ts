@@ -24,7 +24,7 @@ export default defineConfig({
         [
           rehypeShiki,
           {
-            langs: ['javascript', 'html', 'css'],
+            langs: ['javascript', 'html', 'css', 'svelte'],
             themes: {
               light: 'vitesse-light',
               dark: 'vitesse-dark'
