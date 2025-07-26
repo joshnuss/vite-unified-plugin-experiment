@@ -1,7 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig } from 'vite'
-import path from 'path'
-import unified from './src/lib/plugin'
+import content from './src/lib/plugin'
 import * as z from 'zod'
 import remarkGfm from 'remark-gfm'
 import remarkCallout from '@r4ai/remark-callout'
@@ -9,9 +8,10 @@ import rehypeShiki from '@shikijs/rehype'
 
 export default defineConfig({
   plugins: [
-    unified({
-      base: 'src/posts/*.md',
-      matter: z.object({
+    content({
+      base: 'posts',
+      pattern: '*.md',
+      fields: z.object({
         title: z.string().nonempty(),
         banner: z.string().url().nonempty(),
         summary: z.optional(z.string()),
@@ -35,10 +35,5 @@ export default defineConfig({
       sort: { field: 'date', order: 'descending' }
     }),
     sveltekit()
-  ],
-  resolve: {
-    alias: {
-      $posts: path.resolve('./src/posts')
-    }
-  }
+  ]
 })

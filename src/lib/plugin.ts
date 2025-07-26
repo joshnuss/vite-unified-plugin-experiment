@@ -38,7 +38,8 @@ export async function parseMarkdown(
 
 export type Options<Schema> = {
   base: string
-  matter?: Schema
+  pattern: string
+  fields?: Schema
   remark?: UnifiedPlugin[]
   rehype?: UnifiedPlugin[]
   sort?: {
@@ -50,10 +51,21 @@ export type Options<Schema> = {
 export default function plugin<Schema extends z.Schema>(options: Options<Schema>): Plugin {
   return {
     name: 'vite-plugin-markdown',
+    config() {
+      return {
+        resolve: {
+          alias: {
+            [`$${options.base}`]: path.resolve(`./src/${options.base}`)
+          },
+        }
+      }
+    },
+
     async transform(content, file): Promise<TransformResult> {
       if (!path.extname(file).match(/^\.md/)) {
         return
       }
+
 
       const {
         data: { matter },
@@ -62,8 +74,8 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
 
       let attributes: Schema | unknown
 
-      if (options.matter) {
-        attributes = options.matter.parse(matter)
+      if (options.fields) {
+        attributes = options.fields.parse(matter)
       }
 
       let constants: string[] = []
