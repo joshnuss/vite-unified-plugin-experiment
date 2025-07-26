@@ -7,7 +7,7 @@ import remarkParse from 'remark-parse'
 import remarkStringify from 'remark-stringify'
 import remarkHTML from 'remark-html'
 import rehypeStringify from 'rehype-stringify'
-import { unified, type Plugin as UnifiedPlugin } from 'unified'
+import { unified, type PluggableList } from 'unified'
 import type { VFile } from 'vfile'
 import { read } from 'to-vfile'
 import { matter } from 'vfile-matter'
@@ -17,8 +17,8 @@ import { snakeCase } from "scule"
 
 export async function parseMarkdown(
   path: string,
-  remark: UnifiedPlugin[],
-  rehype: UnifiedPlugin[]
+  remark: PluggableList,
+  rehype: PluggableList
 ): Promise<VFile> {
   const contents = await read(path)
   const data = await unified()
@@ -42,8 +42,8 @@ export type Options<Schema> = {
   base: string
   pattern: string
   fields?: Schema
-  remark?: UnifiedPlugin[]
-  rehype?: UnifiedPlugin[]
+  remark: PluggableList
+  rehype: PluggableList
   sort?: {
     field: string
     order?: 'ascending' | 'descending'
