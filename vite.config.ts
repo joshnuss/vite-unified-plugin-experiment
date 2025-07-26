@@ -16,7 +16,7 @@ export default defineConfig({
         banner: z.string().url().nonempty(),
         summary: z.optional(z.string()),
         date: z.iso.date(),
-        tags: z.optional(z.array(z.string())),
+        tags: z.array(z.string()).optional(),
         author: z.enum(['josh', 'jonathan'])
       }),
       remark: [remarkGfm, remarkCallout],
