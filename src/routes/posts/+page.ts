@@ -1,4 +1,3 @@
-
 import { list } from '#posts'
 
 export async function load() {
