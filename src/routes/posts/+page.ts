@@ -1,7 +1,8 @@
+
+import { list } from '#posts'
+
 export async function load() {
-  const posts = await Promise.all(
-    Object.values(import.meta.glob('#posts/*.md')).map((content) => content())
-  )
+  const posts = await list()
 
   return { posts }
 }

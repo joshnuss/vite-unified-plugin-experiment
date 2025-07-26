@@ -49,15 +49,43 @@ export type Options<Schema> = {
 }
 
 export default function plugin<Schema extends z.Schema>(options: Options<Schema>): Plugin {
+  const virtualModuleId = 'virtual:vite-plugin-collection-module'
+  const resolvedVirtualModuleId = '\0' + virtualModuleId
+  const resolvedPath = path.resolve(`./src/${options.base}`)
+
   return {
-    name: 'vite-plugin-markdown',
+    name: 'vite-plugin-collection',
     config() {
       return {
         resolve: {
           alias: {
-            [`#${options.base}`]: path.resolve(`./src/${options.base}`)
+            [`#${options.base}`]: resolvedPath
           },
         }
+      }
+    },
+
+    resolveId(id) {
+      if (id.endsWith(`src/${options.base}`)) {
+        return id
+      }
+    },
+
+    load(id) {
+      if (id.endsWith(`src/${options.base}`)) {
+        return `
+          export function get(id) {
+            return import(\`./${options.base}/\${id}.md\`)
+          }
+
+          export function list() {
+            return Promise.all(
+              Object.values(
+                import.meta.glob('./${options.base}/*.md')
+              ).map((content) => content())
+            )
+          }
+        `
       }
     },
 
