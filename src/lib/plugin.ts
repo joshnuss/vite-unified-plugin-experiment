@@ -84,10 +84,13 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
           }
 
           export function ${list_name}() {
+            const files = import.meta.glob('./${options.base}/*.md')
+
             return Promise.all(
-              Object.values(
-                import.meta.glob('./${options.base}/*.md')
-              ).map((content) => content())
+              Object
+                .values(files)
+                .map((content) => content())
+                .sort((a, b) => b.date - a.date)
             )
           }
         `
