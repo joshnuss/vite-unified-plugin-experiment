@@ -54,7 +54,7 @@ For example in SvelteKit
 
 ### To load a list of posts:
 
-```
+```javascript
 // in src/routes/posts/+page.svelte
 import { list_posts } from '#posts'
 
@@ -69,7 +69,7 @@ Under the hoods this uses `import.meta.glob(...)`
 
 ### To load a single post:
 
-```
+```javascript
 // in src/routes/posts/[slug]/+page.svelte
 import { error, type ServerLoad } from '@sveltejs/kit'
 import { get_post } from '#posts'
