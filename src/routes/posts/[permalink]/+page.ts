@@ -7,7 +7,7 @@ export const load: ServerLoad = async ({ params }) => {
       post: await get_post(params.permalink)
     }
   } catch (err) {
-    console.log(err)
+    console.error(err)
     error(404)
   }
 }
