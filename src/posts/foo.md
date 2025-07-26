@@ -14,9 +14,14 @@ Hello World
 x = 1 + 1
 ```
 
+## some svelte codes
 
 ```svelte
 <script lang="ts">
   let props = $props()
 </script>
+
+{#each props as prop}
+  {prop}
+{/each}
 ```

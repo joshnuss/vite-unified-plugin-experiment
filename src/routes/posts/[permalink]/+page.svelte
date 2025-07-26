@@ -3,6 +3,8 @@
   let { post } = $derived(data)
 </script>
 
+<a href="/posts">&lt; Back</a>
+
 <h1>{post.title}</h1>
 {@html post.body}
 
