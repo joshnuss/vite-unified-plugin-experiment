@@ -12,7 +12,8 @@ experiment to create a framework-agnostic vite plugin for working with markdown
 - Can have multiple directories (blog, docs) with separate config
 - Frontmatter is typed with Zod
 - Supports Shiki via rehype
-- It automatically adds as alias for each collection, for example `base: 'posts'` adds an import `import { get_post, list_posts } from '#posts'`
+- It automatically adds as alias for each collection, for example `base: 'posts'` adds an alias `import ... from '#posts'`
+- Can sort content, for example based on date
 
 ## Config example
 
@@ -22,7 +23,7 @@ The plugin API looks like this:
 // in vite.config.ts
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig } from 'vite'
-import collection from './src/plugins/unified'
+import collection from './src/lib/plugin'
 import * as z from 'zod'
 
 export default defineConfig({

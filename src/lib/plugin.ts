@@ -83,15 +83,14 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
             return import(\`./${options.base}/\${id}.md\`)
           }
 
-          export function ${list_name}() {
+          export async function ${list_name}() {
             const files = import.meta.glob('./${options.base}/*.md')
-
-            return Promise.all(
+            const records = await Promise.all(
               Object
                 .values(files)
                 .map((content) => content())
-                .sort((a, b) => b.date - a.date)
             )
+            return records${build_sort(options.sort)}
           }
         `
       }
@@ -130,4 +129,33 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
       }
     }
   }
+}
+
+
+function build_sort<Schema>(sort: Options<Schema>['sort']): string {
+  if (!sort) return ''
+
+  const {field, order} = sort
+
+  if (order == 'descending') {
+    return `.sort((a, b) => {
+      if (a.${field} > b.${field}) {
+        return -1
+      }
+      if (a.${field} < b.${field}) {
+        return 1
+      }
+      return 0
+    })`
+  }
+
+  return `.sort((a, b) => {
+    if (a.${field} < b.${field}) {
+      return -1
+    }
+    if (a.${field} > b.${field}) {
+      return 1
+    }
+    return 0
+  })`
 }
