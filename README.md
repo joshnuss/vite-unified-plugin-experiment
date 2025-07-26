@@ -12,16 +12,16 @@ Experimental vite plugin for markdown blogs & docs sites.
 
 - Based on `unified`. Supports all `remark` & `rehype` plugins.
 - Simple API
-  - Loading a single post `await get(slug)`
-  - Loading multiple posts `await list()`
-- Can have multiple directories (blog, docs) with separate config
-- Supports Shiki via rehype
-- It adds an alias for each collection, for example a collection named `'posts'` an alias `import ... from '#posts'` is provided.
-- It be configured to sort the content, for example based on in the frontmatter like `date`
+  - Loading a single post: `const post = await get(slug)`
+  - Loading multiple posts: `const posts = await list()`
+- Supports multiple directories (blog, docs) with separate config.
+- Supports Shiki code formatting via rehype.
+- Adds an alias for each collection. For example a collection in `src/docs` gets aliased as `#docs`, ie `import { get, list } from '#docs'`.
+- Can be configured to sort the content. For example based on frontmatter fields like `date`.
 
 ## Config example
 
-The plugin API looks like this:
+The plugin configuration looks like this:
 
 ```javascript
 // in vite.config.ts
@@ -33,8 +33,13 @@ import * as z from 'zod'
 export default defineConfig({
   plugins: [
     collection({
+      // corresponds to folder src/posts
       base: 'posts',
+
+      // collection matches files src/posts/*.md
       pattern: '*.md',
+
+      // frontmatter fields use a zod schema
       fields: z.object({
         title: z.string().nonempty(),
         banner: z.url(),
@@ -42,14 +47,13 @@ export default defineConfig({
         date: z.iso.date(),
         tags: z.array(z.string()).optional(),
       }),
-      remark: [
-        // remark plugins
-      ],
-      rehype: [
-        // rehype plugins
-      ],
 
-      // set a default sort order based on `date` field
+      // optional remark plugins
+      remark: [],
+      // optional rehype plugins
+      rehype: [],
+
+      // order the posts based on `date` frontmatter field
       sort: { field: 'date', direction: 'descending'}
     }),
 
@@ -68,6 +72,7 @@ For example in SvelteKit
 // in src/routes/posts/+page.svelte
 import { list } from '#posts'
 
+// load all posts
 export async function load() {
   const posts = await list()
 
@@ -75,7 +80,7 @@ export async function load() {
 }
 ```
 
-Under the hoods this uses `import.meta.glob(...)`
+Under the hood this uses "import globbing" with `import.meta.glob(...)`
 
 ### To load a single post:
 
@@ -84,6 +89,7 @@ Under the hoods this uses `import.meta.glob(...)`
 import { error, type ServerLoad } from '@sveltejs/kit'
 import { get } from '#posts'
 
+// load post based on route params
 export const load: ServerLoad = async ({ params }) => {
   try {
     const post = await get(params.slug)
@@ -95,4 +101,4 @@ export const load: ServerLoad = async ({ params }) => {
 }
 ```
 
-Under the hoods this uses `await import(...)`
+Under the hood this uses a "dynamic import" with `await import(...)`
