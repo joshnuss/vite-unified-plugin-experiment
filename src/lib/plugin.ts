@@ -55,7 +55,7 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
       return {
         resolve: {
           alias: {
-            [`$${options.base}`]: path.resolve(`./src/${options.base}`)
+            [`#${options.base}`]: path.resolve(`./src/${options.base}`)
           },
         }
       }
@@ -65,7 +65,6 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
       if (!path.extname(file).match(/^\.md/)) {
         return
       }
-
 
       const {
         data: { matter },
