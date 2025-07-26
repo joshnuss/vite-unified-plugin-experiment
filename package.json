@@ -48,5 +48,9 @@
     "vfile-matter": "^5.0.1",
     "vite": "^7.0.4",
     "zod": "^4.0.10"
+  },
+  "dependencies": {
+    "pluralize": "^8.0.0",
+    "scule": "^1.3.0"
   }
 }

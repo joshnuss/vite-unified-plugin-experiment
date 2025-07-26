@@ -12,6 +12,8 @@ import type { VFile } from 'vfile'
 import { read } from 'to-vfile'
 import { matter } from 'vfile-matter'
 import * as z from 'zod'
+import pluralize from 'pluralize'
+import { snakeCase } from "scule"
 
 export async function parseMarkdown(
   path: string,
@@ -50,7 +52,6 @@ export type Options<Schema> = {
 
 export default function plugin<Schema extends z.Schema>(options: Options<Schema>): Plugin {
   const virtualModuleId = 'virtual:vite-plugin-collection-module'
-  const resolvedVirtualModuleId = '\0' + virtualModuleId
   const resolvedPath = path.resolve(`./src/${options.base}`)
 
   return {
@@ -73,12 +74,16 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
 
     load(id) {
       if (id.endsWith(`src/${options.base}`)) {
+        const singular = pluralize.singular(options.base)
+        const get_name = `get_${snakeCase(singular)}`
+        const list_name = `list_${snakeCase(options.base)}`
+
         return `
-          export function get(id) {
+          export function ${get_name}(id) {
             return import(\`./${options.base}/\${id}.md\`)
           }
 
-          export function list() {
+          export function ${list_name}() {
             return Promise.all(
               Object.values(
                 import.meta.glob('./${options.base}/*.md')

@@ -1,7 +1,7 @@
-import { list } from '#posts'
+import { list_posts } from '#posts'
 
 export async function load() {
-  const posts = await list()
-
-  return { posts }
+  return {
+    posts: await list_posts()
+  }
 }
