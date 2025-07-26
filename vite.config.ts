@@ -15,7 +15,7 @@ export default defineConfig({
         title: z.string().nonempty(),
         banner: z.string().url().nonempty(),
         summary: z.optional(z.string()),
-        date: z.string().date(),
+        date: z.iso.date(),
         tags: z.optional(z.array(z.string())),
         author: z.enum(['josh', 'jonathan'])
       }),
