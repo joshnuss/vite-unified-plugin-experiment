@@ -48,10 +48,12 @@ export default defineConfig({
         tags: z.array(z.string()).optional(),
       }),
 
-      // optional remark plugins
-      remark: [],
-      // optional rehype plugins
-      rehype: [],
+      plugins: {
+        // optional remark plugins
+        remark: [],
+        // optional rehype plugins
+        rehype: [],
+      },
 
       // order the posts based on `date` frontmatter field
       sort: { field: 'date', direction: 'descending'}

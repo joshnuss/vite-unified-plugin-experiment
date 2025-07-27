@@ -19,19 +19,21 @@ export default defineConfig({
         tags: z.array(z.string()).optional(),
         author: z.enum(['josh', 'jonathan'])
       }),
-      remark: [remarkGfm, remarkCallout],
-      rehype: [
-        [
-          rehypeShiki,
-          {
-            langs: ['javascript', 'html', 'css', 'svelte'],
-            themes: {
-              light: 'vitesse-light',
-              dark: 'vitesse-dark'
+      plugins: {
+        remark: [remarkGfm, remarkCallout],
+        rehype: [
+          [
+            rehypeShiki,
+            {
+              langs: ['javascript', 'html', 'css', 'svelte'],
+              themes: {
+                light: 'vitesse-light',
+                dark: 'vitesse-dark'
+              }
             }
-          }
-        ]
-      ],
+          ]
+        ],
+      },
       sort: { field: 'date', order: 'descending' }
     }),
     sveltekit()

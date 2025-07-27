@@ -17,20 +17,20 @@ import type { ZodType } from 'zod'
 import { camelCase } from 'scule'
 import pluralize from 'pluralize'
 
-export async function parseMarkdown(
+export async function parse_markdown(
   path: string,
-  remark?: PluggableList,
-  rehype?: PluggableList
+  remark: PluggableList,
+  rehype: PluggableList
 ): Promise<VFile> {
   const contents = await read(path)
   const data = await unified()
     .use(remarkParse)
     .use(remarkStringify)
-    .use(remark || [])
+    .use(remark)
     .use(remarkFrontmatter, ['yaml'])
     .use(remarkHTML)
     .use(remarkRehype)
-    .use(rehype || [])
+    .use(rehype)
     .use(rehypeStringify)
     .use(() => (tree, file) => {
       matter(file)
@@ -44,8 +44,10 @@ export type Options<Schema> = {
   base: string
   pattern: string
   fields?: Schema
-  remark?: PluggableList
-  rehype?: PluggableList
+  plugins?: {
+    remark?: PluggableList
+    rehype?: PluggableList
+  }
   sort?: {
     field: string
     order?: 'ascending' | 'descending'
@@ -100,7 +102,7 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
       const {
         data: { matter },
         value: body
-      } = await parseMarkdown(file, options.remark || [], options.rehype || [])
+      } = await parse_markdown(file, options.plugins?.remark || [], options.plugins?.rehype || [])
 
       let attributes: Schema | unknown
 
