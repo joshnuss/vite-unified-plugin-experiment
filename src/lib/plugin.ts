@@ -184,8 +184,6 @@ async function write_types<Schema>(options: Options<Schema>) {
     })
   }
 
-  console.log(typings)
-
   await write_type_definitions(typings, options)
 }
 
