@@ -3,9 +3,9 @@ import { get } from '#posts'
 
 export const load: ServerLoad = async ({ params }) => {
   try {
-    return {
-      post: await get(params.permalink)
-    }
+    const post = await get(params.permalink)
+
+    return { post }
   } catch (err) {
     console.error(err)
     error(404)
