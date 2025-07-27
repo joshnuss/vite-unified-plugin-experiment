@@ -70,6 +70,10 @@ For example in SvelteKit
 
 ### To load a list of posts:
 
+Call `list()`.
+
+Example:
+
 ```javascript
 // in src/routes/posts/+page.svelte
 import { list } from '#posts'
@@ -82,17 +86,19 @@ export async function load() {
 }
 ```
 
-Under the hood this uses "import globbing" with `import.meta.glob(...)`
-
 ### To load a single post:
+
+Call `get(slug)`
+
+Example:
 
 ```javascript
 // in src/routes/posts/[slug]/+page.svelte
-import { error, type ServerLoad } from '@sveltejs/kit'
+import { error } from '@sveltejs/kit'
 import { get } from '#posts'
 
 // load post based on route params
-export const load: ServerLoad = async ({ params }) => {
+export async function load({ params }) {
   try {
     const post = await get(params.slug)
 
@@ -102,5 +108,3 @@ export const load: ServerLoad = async ({ params }) => {
   }
 }
 ```
-
-Under the hood this uses a "dynamic import" with `await import(...)`
