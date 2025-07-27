@@ -1,7 +1,7 @@
-import { error, type ServerLoad } from '@sveltejs/kit'
+import { error } from '@sveltejs/kit'
 import { get } from '#posts'
 
-export const load: ServerLoad = async ({ params }) => {
+export async function load({ params }) {
   try {
     const post = await get(params.permalink)
 
