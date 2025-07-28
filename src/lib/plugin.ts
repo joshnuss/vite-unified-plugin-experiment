@@ -54,11 +54,20 @@ export type Options<Schema> = {
   }
 }
 
-export default function plugin<Schema extends z.Schema>(options: Options<Schema>): Plugin {
+let first_run = true
 
+export default function plugin<Schema extends z.Schema>(options: Options<Schema>): Plugin {
   return {
     name: 'vite-plugin-collection',
-    config() {
+    async config() {
+      if (first_run) {
+        first_run = false
+
+        if (await exists('collections.d.ts')) {
+          await fs.unlink('collections.d.ts')
+        }
+      }
+
       return {
         resolve: {
           alias: {
@@ -110,8 +119,6 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
         attributes = options.fields.parse(matter)
       }
 
-      await write_types(options)
-
       let constants: string[] = []
 
       if (attributes) {
@@ -127,7 +134,11 @@ export default function plugin<Schema extends z.Schema>(options: Options<Schema>
           ${constants.join('\n')}
         `
       }
-    }
+    },
+
+    async buildStart() {
+      await write_types(options)
+    },
   }
 }
 
@@ -230,11 +241,20 @@ async function write_type_definitions<Schema>(typings: Type[], options: Options<
   export function get(id: string): Promise<${class_name}>\n`
   code += `}\n`
 
-  await fs.writeFile('collections.d.ts', code)
+  await fs.appendFile('collections.d.ts', code)
 }
 
 function capitalize(str: string): string {
   if (!str) return ''
 
   return str[0].toUpperCase() + str.slice(1)
+}
+
+async function exists(path: string): Promise<boolean> {
+  try {
+    await fs.access(path)
+    return true
+  } catch {
+    return false
+  }
 }
