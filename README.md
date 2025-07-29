@@ -1,5 +1,9 @@
 # vite unified plugin
 
+> [!NOTE]
+> This experiment has been turned into an npm package
+> https://npmjs.com/package/vite-plugin-collections
+
 Experimental vite plugin for markdown blogs & docs sites.
 
 ## Benefits
